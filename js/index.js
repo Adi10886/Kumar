@@ -1,137 +1,89 @@
-const navMenu  = document.getElementById('nav-menu'),
-    navToggle =  document.getElementById('nav-toggle'),
-    navClose =  document.getElementById('nav-close')
+let menu = document.querySelector('#menu-bars');
+let navbar = document.querySelector('.navbar');
 
-    if(navToggle){
-        navToggle.addEventListener('click',() =>{
-            navMenu.classList.add('show-menu')
-        })
-    }
-    if(navClose){
-        navClose.addEventListener('click',()=>{
-            navMenu.classList.remove('show-menu')
-        })
-    }
-
-    const navLink = document.querySelectorAll('.nav_link')
-
-function linkAction(){
-    const navMenu = document.getElementById('nav-menu')
-    // When we click on each nav__link, we remove the show-menu class
-    navMenu.classList.remove('show-menu')
-}
-navLink.forEach(n => n.addEventListener('click', linkAction))
-
-
-const skillsContent = document.getElementsByClassName('skills_content'),
-     skillsHeader = document.querySelectorAll('.skills_header')
-function toggleSkills(){
-    let itemClass = this.parentNode.className
-
-    for(i = 0;i< skillsContent.length; i++){
-        skillsContent[i].className ='skills_content skills_close'
-    }
-    if(itemClass === 'skills_content skills_close'){
-        this.parentNode.className = 'skills_content skills_open'
-    }
+menu.onclick = () =>{
+  menu.classList.toggle('fa-times');
+  navbar.classList.toggle('active');
 }
 
-skillsHeader.forEach((el)=>{
-    el.addEventListener('click',toggleSkills)
-})
+let section = document.querySelectorAll('section');
+let navLinks = document.querySelectorAll('header .navbar a');
 
-const tabs = document.querySelectorAll('[data-target]'),
-  tabContents = document.querySelectorAll('[data-content]')
+window.onscroll = () =>{
 
-tabs.forEach(tab =>{
-    tab.addEventListener('click',()=>{
-        const target = document.querySelector(tab.dataset.target)
+  menu.classList.remove('fa-times');
+  navbar.classList.remove('active');
 
-        tabContents.forEach(tabContent =>{
-            tabContent.classList.remove('qualification_active')
-        })
-        target.classList.add('qualification_active')
+  section.forEach(sec =>{
 
-        tabs.forEach(tab =>{
-            tab.classList.remove('qualification_active')
-        })
-        tab.classList.add('qualification_active')
+    let top = window.scrollY;
+    let height = sec.offsetHeight;
+    let offset = sec.offsetTop - 150;
+    let id = sec.getAttribute('id');
 
-    })
-})  
+    if(top >= offset && top < offset + height){
+      navLinks.forEach(links =>{
+        links.classList.remove('active');
+        document.querySelector('header .navbar a[href*='+id+']').classList.add('active');
+      });
+    };
 
-const modalViews = document.querySelectorAll('.services_modal'),
-      modalBtns = document.querySelectorAll('.services_button'),
-      modalCloses = document.querySelectorAll('.services_modal-close')
-
-let modal = function(modalClick){
-    modalViews[modalClick].classList.add('active-modal')
-}
-
-modalBtns.forEach((modalBtns, i) =>{
-    modalBtns.addEventListener('click', ()=>{
-        modal(i)
-    })
-})
-
-modalCloses.forEach((modalCloses)=>{
-    modalCloses.addEventListener('click', () =>{
-        modalViews.forEach((modalView)=>{
-            modalView.classList.remove('active-modal')
-        })
-    })
-})
-
-let swiper = new Swiper(".portfolio-container", {
-    cssMode: true,
-    loop:true,
-
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    pagination: {
-      el: ".swiper-pagination",
-      clickable:true,
-    },
-    mousewheel: true,
-    keyboard: true,
   });
 
-  /*==================== SCROLL SECTIONS ACTIVE LINK ====================*/
-const sections = document.querySelectorAll('section[id]')
-
-function scrollActive(){
-    const scrollY = window.pageYOffset
-
-    sections.forEach(current =>{
-        const sectionHeight = current.offsetHeight
-        const sectionTop = current.offsetTop - 50;
-        sectionId = current.getAttribute('id')
-
-        if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight){
-            document.querySelector('.nav_menu a[href*=' + sectionId + ']').classList.add('active-link')
-        }else{
-            document.querySelector('.nav_menu a[href*=' + sectionId + ']').classList.remove('active-link')
-        }
-    })
 }
-window.addEventListener('scroll', scrollActive)
 
-
-/*==================== CHANGE BACKGROUND HEADER ====================*/ 
-function scrollHeader(){
-    const nav = document.getElementById('header')
-    // When the scroll is greater than 200 viewport height, add the scroll-header class to the header tag
-    if(this.scrollY >= 80) nav.classList.add('scroll-header'); else nav.classList.remove('scroll-header')
+document.querySelector('#search-icon').onclick = () =>{
+  document.querySelector('#search-form').classList.toggle('active');
 }
-window.addEventListener('scroll', scrollHeader)
 
-/*==================== SHOW SCROLL UP ====================*/ 
+/*document.querySelector('#close').onclick = () =>{
+  document.querySelector('#search-form').classList.remove('active');
+}*/
 
-function scrollup(){
-    const scrollup = document.getElementById('scroll-up');
-    // When the scroll is higher than 560 viewport height, add the show-scroll class to the a tag with the scroll-top class
-    if(this.scrollY >= 560) scrollUp.classList.add('show-scroll'); else scrollUp.classList.remove('show-scroll')
+var swiper = new Swiper(".home-slider", {
+  spaceBetween: 30,
+  centeredSlides: true,
+  autoplay: {
+    delay: 7500,
+    disableOnInteraction: false,
+  },
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+  loop:true,
+});
+
+var swiper = new Swiper(".review-slider", {
+  spaceBetween: 20,
+  centeredSlides: true,
+  autoplay: {
+    delay: 7500,
+    disableOnInteraction: false,
+  },
+  loop:true,
+  breakpoints: {
+    0: {
+        slidesPerView: 1,
+    },
+    640: {
+      slidesPerView: 2,
+    },
+    768: {
+      slidesPerView: 2,
+    },
+    1024: {
+      slidesPerView: 3,
+    },
+  },
+});
+
+function loader(){
+  document.querySelector('.loader-container').classList.add('fade-out');
 }
-window.addEventListener('scroll', scrollUp)
+
+function fadeOut(){
+  setInterval(loader, 3000);
+}
+
+window.onload = fadeOut;
